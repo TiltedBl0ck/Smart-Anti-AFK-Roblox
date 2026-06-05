@@ -1,0 +1,16 @@
+Python Cache
+
+pycache/
+*.py[cod]
+
+PyInstaller Build Folders
+
+build/
+dist/
+*.spec
+
+Virtual Environments
+
+venv/
+.venv/
+env/
