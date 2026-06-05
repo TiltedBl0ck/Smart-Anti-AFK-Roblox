@@ -26,7 +26,6 @@ jobs:
         pip install -r requirements.txt
 
     - name: Build Windows EXE
-      # --windowed hides the console window on Windows (correct usage)
       run: pyinstaller --noconfirm --onefile --windowed --name "Smart-Anti-AFK-Windows" main.py
 
     - name: Upload to Release (Windows)
@@ -51,7 +50,6 @@ jobs:
         pip install -r requirements.txt
 
     - name: Build Linux Executable
-      # --windowed removed — not valid on Linux, causes build failure
       run: pyinstaller --noconfirm --onefile --name "Smart-Anti-AFK-Linux" main.py
 
     - name: Upload to Release (Linux)

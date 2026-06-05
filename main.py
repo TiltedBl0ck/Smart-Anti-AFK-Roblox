@@ -26,19 +26,22 @@ def afk_loop():
                 if not is_running:
                     break
                 time.sleep(1)
-            
+
             # Main execution loop
             while is_running:
                 current_action = action_var.get()
                 current_interval_str = interval_var.get()
-                
+
                 minutes = int(current_interval_str.split()[0])
                 wait_seconds = minutes * 60
-                
+
                 execute_action(current_action, "Normal")
-                
-                print(f"Executed: {current_action}. Waiting {minutes} minutes...")
-                
+
+                log_text.config(state="normal")
+                log_text.insert(tk.END, f"Executed: {current_action}. Waiting {minutes} min...\n")
+                log_text.see(tk.END)
+                log_text.config(state="disabled")
+
                 for _ in range(wait_seconds):
                     if not is_running:
                         break
@@ -49,31 +52,32 @@ def afk_loop():
 def toggle_script():
     global is_running
     is_running = not is_running
-    
+
     if is_running:
         status_label.config(text="Status: ENABLED", fg="green")
         toggle_btn.config(text="Stop Anti-AFK", bg="#ffcccc")
-        action_menu.config(state="disabled") # Lock configurations
+        action_menu.config(state="disabled")
         interval_menu.config(state="disabled")
-        print(f"Enabled! Getting ready to {action_var.get()} in 5 seconds...")
-        
+        log_text.config(state="normal")
+        log_text.insert(tk.END, f"Enabled! Getting ready to {action_var.get()} in 5 seconds...\n")
+        log_text.see(tk.END)
+        log_text.config(state="disabled")
         root.iconify()
     else:
         status_label.config(text="Status: DISABLED", fg="red")
         toggle_btn.config(text="Start Anti-AFK", bg="#ccffcc")
         action_menu.config(state="normal")
         interval_menu.config(state="normal")
-        print("Disabled.")
-
-# Start the background loop in a separate thread so the GUI doesn't freeze
-thread = threading.Thread(target=afk_loop, daemon=True)
-thread.start()
+        log_text.config(state="normal")
+        log_text.insert(tk.END, "Disabled.\n")
+        log_text.see(tk.END)
+        log_text.config(state="disabled")
 
 # GUI Setup
 root = tk.Tk()
 root.title("Smart Anti-AFK")
-root.geometry("250x220")
-root.attributes('-topmost', True) 
+root.geometry("280x300")
+root.attributes('-topmost', True)
 root.resizable(False, False)
 
 status_label = tk.Label(root, text="Status: DISABLED", fg="red", font=("Helvetica", 12, "bold"))
@@ -82,7 +86,7 @@ status_label.pack(pady=5)
 # Action Dropdown
 action_label = tk.Label(root, text="Action to Perform:", font=("Helvetica", 9))
 action_label.pack()
-action_var = tk.StringVar(value=ACTIONS[0]) 
+action_var = tk.StringVar(value=ACTIONS[0])
 action_menu = tk.OptionMenu(root, action_var, *ACTIONS)
 action_menu.config(font=("Helvetica", 10))
 action_menu.pack(pady=3)
@@ -90,7 +94,7 @@ action_menu.pack(pady=3)
 # Interval Dropdown
 interval_label = tk.Label(root, text="Trigger Interval:", font=("Helvetica", 9))
 interval_label.pack()
-interval_var = tk.StringVar(value=INTERVALS[1]) # Defaults to index 1 ("10 Minutes")
+interval_var = tk.StringVar(value=INTERVALS[1])
 interval_menu = tk.OptionMenu(root, interval_var, *INTERVALS)
 interval_menu.config(font=("Helvetica", 10))
 interval_menu.pack(pady=3)
@@ -98,5 +102,13 @@ interval_menu.pack(pady=3)
 # Toggle Control Button
 toggle_btn = tk.Button(root, text="Start Anti-AFK", font=("Helvetica", 11, "bold"), bg="#ccffcc", command=toggle_script)
 toggle_btn.pack(pady=10)
+
+# Log output box (replaces dead print() calls in --windowed mode)
+log_text = tk.Text(root, height=5, width=34, state="disabled", font=("Courier", 8))
+log_text.pack(pady=3)
+
+# Start thread AFTER all widgets are defined to avoid NameError race condition
+thread = threading.Thread(target=afk_loop, daemon=True)
+thread.start()
 
 root.mainloop()
