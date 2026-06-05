@@ -73,7 +73,6 @@ def toggle_script():
         log_text.config(state="disabled")
 
 if __name__ == "__main__":
-    # GUI Setup
     root = tk.Tk()
     root.title("Smart Anti-AFK")
     root.geometry("280x300")
@@ -103,7 +102,6 @@ if __name__ == "__main__":
     log_text = tk.Text(root, height=5, width=34, state="disabled", font=("Courier", 8))
     log_text.pack(pady=3)
 
-    # Thread starts AFTER widgets exist
     thread = threading.Thread(target=afk_loop, daemon=True)
     thread.start()
 

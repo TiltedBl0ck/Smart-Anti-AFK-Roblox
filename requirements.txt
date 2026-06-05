@@ -8,5 +8,4 @@ pygetwindow>=0.0.9; platform_system == "Windows"
 pynput>=1.7.6; platform_system == "Windows"
 
 # Build/Packaging Dependencies
-# Used to compile your Python code into a standalone .exe or Linux executable
 pyinstaller>=6.3.0
