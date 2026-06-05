@@ -27,7 +27,6 @@ def afk_loop():
                     break
                 time.sleep(1)
 
-            # Main execution loop
             while is_running:
                 current_action = action_var.get()
                 current_interval_str = interval_var.get()
@@ -73,42 +72,39 @@ def toggle_script():
         log_text.see(tk.END)
         log_text.config(state="disabled")
 
-# GUI Setup
-root = tk.Tk()
-root.title("Smart Anti-AFK")
-root.geometry("280x300")
-root.attributes('-topmost', True)
-root.resizable(False, False)
+if __name__ == "__main__":
+    # GUI Setup
+    root = tk.Tk()
+    root.title("Smart Anti-AFK")
+    root.geometry("280x300")
+    root.attributes('-topmost', True)
+    root.resizable(False, False)
 
-status_label = tk.Label(root, text="Status: DISABLED", fg="red", font=("Helvetica", 12, "bold"))
-status_label.pack(pady=5)
+    status_label = tk.Label(root, text="Status: DISABLED", fg="red", font=("Helvetica", 12, "bold"))
+    status_label.pack(pady=5)
 
-# Action Dropdown
-action_label = tk.Label(root, text="Action to Perform:", font=("Helvetica", 9))
-action_label.pack()
-action_var = tk.StringVar(value=ACTIONS[0])
-action_menu = tk.OptionMenu(root, action_var, *ACTIONS)
-action_menu.config(font=("Helvetica", 10))
-action_menu.pack(pady=3)
+    action_label = tk.Label(root, text="Action to Perform:", font=("Helvetica", 9))
+    action_label.pack()
+    action_var = tk.StringVar(value=ACTIONS[0])
+    action_menu = tk.OptionMenu(root, action_var, *ACTIONS)
+    action_menu.config(font=("Helvetica", 10))
+    action_menu.pack(pady=3)
 
-# Interval Dropdown
-interval_label = tk.Label(root, text="Trigger Interval:", font=("Helvetica", 9))
-interval_label.pack()
-interval_var = tk.StringVar(value=INTERVALS[1])
-interval_menu = tk.OptionMenu(root, interval_var, *INTERVALS)
-interval_menu.config(font=("Helvetica", 10))
-interval_menu.pack(pady=3)
+    interval_label = tk.Label(root, text="Trigger Interval:", font=("Helvetica", 9))
+    interval_label.pack()
+    interval_var = tk.StringVar(value=INTERVALS[1])
+    interval_menu = tk.OptionMenu(root, interval_var, *INTERVALS)
+    interval_menu.config(font=("Helvetica", 10))
+    interval_menu.pack(pady=3)
 
-# Toggle Control Button
-toggle_btn = tk.Button(root, text="Start Anti-AFK", font=("Helvetica", 11, "bold"), bg="#ccffcc", command=toggle_script)
-toggle_btn.pack(pady=10)
+    toggle_btn = tk.Button(root, text="Start Anti-AFK", font=("Helvetica", 11, "bold"), bg="#ccffcc", command=toggle_script)
+    toggle_btn.pack(pady=10)
 
-# Log output box (replaces dead print() calls in --windowed mode)
-log_text = tk.Text(root, height=5, width=34, state="disabled", font=("Courier", 8))
-log_text.pack(pady=3)
+    log_text = tk.Text(root, height=5, width=34, state="disabled", font=("Courier", 8))
+    log_text.pack(pady=3)
 
-# Start thread AFTER all widgets are defined to avoid NameError race condition
-thread = threading.Thread(target=afk_loop, daemon=True)
-thread.start()
+    # Thread starts AFTER widgets exist
+    thread = threading.Thread(target=afk_loop, daemon=True)
+    thread.start()
 
-root.mainloop()
+    root.mainloop()
