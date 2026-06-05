@@ -19,15 +19,16 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller pygetwindow pynput
-        
+        pip install -r requirements.txt
+
     - name: Build Windows EXE
+      # --windowed hides the console window on Windows (correct usage)
       run: pyinstaller --noconfirm --onefile --windowed --name "Smart-Anti-AFK-Windows" main.py
-      
+
     - name: Upload to Release (Windows)
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
@@ -43,18 +44,18 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller evdev
-        
+        pip install -r requirements.txt
+
     - name: Build Linux Executable
-      run: pyinstaller --noconfirm --onefile --windowed --name "Smart-Anti-AFK-Linux" main.py
-      
+      # --windowed removed — not valid on Linux, causes build failure
+      run: pyinstaller --noconfirm --onefile --name "Smart-Anti-AFK-Linux" main.py
+
     - name: Upload to Release (Linux)
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: dist/*
-```
