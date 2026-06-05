@@ -6,13 +6,13 @@ OS_TYPE = platform.system()
 # 2.Dynamically import only the module needed for the current OS
 if OS_TYPE == "Linux":
     try:
-        from . import linux_input as os_input
+        from ...core import linux_input as os_input
     except ImportError as err:
         os_input = None
         print(f"Linux Import Error: {err}")
 elif OS_TYPE == "Windows":
     try:
-        from . import windows_input as os_input
+        from ...core import windows_input as os_input
     except ImportError as err:
         os_input = None
         print(f"Windows Import Error: {err}")

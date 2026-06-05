@@ -1,7 +1,7 @@
 import time
 import threading
 import tkinter as tk
-from core import execute_action
+from main.core import execute_action
 
 is_running = False
 
